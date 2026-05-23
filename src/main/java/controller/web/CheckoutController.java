@@ -2,10 +2,13 @@ package controller.web;
 
 import model.Cart;
 import model.Order;
+import model.OrderDetail;
 import model.OrderDetailInfo;
 import model.User;
 import service.OrderService;
 import util.EmailUtility;
+import util.SignatureUtil;
+import dao.OrderDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -66,8 +69,26 @@ public class CheckoutController extends BaseController {
             int orderId = orderService.placeOrder(user, cart, fullShippingInfo);
 
             if (orderId > 0) {
-                // LẤY THÔNG TIN ĐỂ GỬI MAIL (Trước khi xóa giỏ hàng)
                 Order newOrder = orderService.getOrderById(orderId);
+                
+                // 1. Tạo chuỗi mã băm từ các sản phẩm được gom (Đã sort product_id ASC để tránh lệch hash)
+                OrderDAO orderDAO = new OrderDAO();
+                List<OrderDetail> rawDetails = orderDAO.getRawDetailsForHash(orderId);
+                StringBuilder detailStrBuilder = new StringBuilder();
+                for (int i = 0; i < rawDetails.size(); i++) {
+                    OrderDetail d = rawDetails.get(i);
+                    detailStrBuilder.append("pid").append(d.getProductId())
+                            .append("_q").append(d.getQuantity())
+                            .append("_p").append((long)d.getPrice());
+                    if (i < rawDetails.size() - 1) detailStrBuilder.append("|");
+                }
+                
+                String orderHash = SignatureUtil.buildOrderHash(orderId, user.getId(), newOrder.getTotalMoney(), detailStrBuilder.toString());
+                
+                // 2. Chuyển trạng thái đơn hàng thành PENDING_SIGNATURE và lưu hash
+                orderDAO.updateOrderHashAndStatus(orderId, orderHash, "PENDING_SIGNATURE");
+
+                // LẤY THÔNG TIN ĐỂ GỬI MAIL (Trước khi xóa giỏ hàng)
                 List<OrderDetailInfo> details = orderService.getOrderDetails(orderId);
                 
                 //  Gửi mail ngầm (Dùng Thread để không làm chậm trang web người dùng)
@@ -75,9 +96,15 @@ public class CheckoutController extends BaseController {
                     EmailUtility.sendOrderConfirmation(user, newOrder, details);
                 }).start();
 
-                //  Xóa giỏ và thông báo
+                //  Xóa giỏ và ĐIỀU HƯỚNG SANG TRANG KÝ SỐ
                 session.removeAttribute("cart");
-                response.sendRedirect("home?status=order_success");
+                
+                // Set attributes cho View
+                request.setAttribute("orderId", orderId);
+                request.setAttribute("orderHash", orderHash);
+                request.setAttribute("totalMoney", newOrder.getTotalMoney());
+                request.getRequestDispatcher("/views/checkout-signature.jsp").forward(request, response);
+                return;
             } else {
                 request.setAttribute("errorMessage", "Đặt hàng thất bại! Có thể do hết hàng.");
                 request.getRequestDispatcher("/views/checkout.jsp").forward(request, response);

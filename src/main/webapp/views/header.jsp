@@ -72,6 +72,10 @@
 								class="fa fa-user m-r-5"></i> <fmt:message key="admin.welcome"
 									bundle="${msgs}" /> ${sessionScope.user.fullName}
 							</a>
+							
+							<a href="${pageContext.request.contextPath}/user-key"
+								class="flex-c-m trans-04 p-lr-25"> <i class="fa fa-key m-r-5"></i> Quản lý khóa
+							</a>
 
 							<a href="${pageContext.request.contextPath}/order-history"
 								class="flex-c-m trans-04 p-lr-25"> <fmt:message

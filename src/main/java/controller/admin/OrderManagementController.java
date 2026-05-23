@@ -68,6 +68,37 @@ public class OrderManagementController extends BaseController {
         else {
             String status = request.getParameter("status");
             List<Order> listOrder = orderService.getAllOrders(status);
+            
+            // --- CƠ CHẾ PHÁT HIỆN GIAN LẬN (TAMPERING DETECTION) ---
+            dao.OrderDAO orderDAO = new dao.OrderDAO();
+            for (Order order : listOrder) {
+                // Chỉ check những đơn đã đc ký
+                if ("VERIFIED".equals(order.getStatus()) && order.getDigitalSignature() != null) {
+                    
+                    // Lôi detail ra nối chuỗi lại theo chuẩn sort ASC để build check hash
+                    java.util.List<model.OrderDetail> rawDetails = orderDAO.getRawDetailsForHash(order.getId());
+                    StringBuilder detailStrBuilder = new StringBuilder();
+                    for (int i = 0; i < rawDetails.size(); i++) {
+                        model.OrderDetail d = rawDetails.get(i);
+                        detailStrBuilder.append("pid").append(d.getProductId())
+                                .append("_q").append(d.getQuantity())
+                                .append("_p").append((long)d.getPrice());
+                        if (i < rawDetails.size() - 1) detailStrBuilder.append("|");
+                    }
+                    
+                    // Build Hash từ cấu trúc DB realtime
+                    String currentHash = util.SignatureUtil.buildOrderHash(order.getId(), order.getUserId(), order.getTotalMoney(), detailStrBuilder.toString());
+                    
+                    // Verify lại chữ ký
+                    boolean isIntact = util.SignatureUtil.verifySignature(currentHash, order.getDigitalSignature(), order.getPublicKeyText());
+                    
+                    if (!isIntact) {
+                        // CHỈ GÁN BỘ NHỚ RAM - KHÔNG GHI XUỐNG DB
+                        order.setStatus("TAMPERED");
+                    }
+                }
+            }
+            
             request.setAttribute("listOrder", listOrder);
             request.getRequestDispatcher("/views/admin/order-manager.jsp").forward(request, response);
         }

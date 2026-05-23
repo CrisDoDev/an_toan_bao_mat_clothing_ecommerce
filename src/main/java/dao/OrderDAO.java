@@ -3,6 +3,7 @@ package dao;
 import model.Cart;
 import model.CartItem;
 import model.Order;
+import model.OrderDetail;
 import model.OrderDetailInfo;
 import model.User;
 import util.DBContext;
@@ -74,6 +75,12 @@ public class OrderDAO {
 					o.setStatus(rs.getString("status"));
 					o.setShippingAddress(rs.getString("shipping_address"));
 					o.setOrderDate(rs.getTimestamp("order_date"));
+					
+					// Ánh xạ thêm các trường chữ ký số
+					o.setKeyId((Integer) rs.getObject("key_id"));
+					o.setDigitalSignature(rs.getString("digital_signature"));
+					o.setOrderHash(rs.getString("order_hash"));
+					o.setSignedAt(rs.getTimestamp("signed_at"));
 
 					list.add(o);
 				}
@@ -111,12 +118,12 @@ public class OrderDAO {
 	// [ADMIN] Lấy tất cả đơn hàng
 	public List<Order> getAllOrders(String status) {
 		List<Order> list = new ArrayList<>();
-		String query = "SELECT * FROM Orders";
+		String query = "SELECT o.*, k.public_key_text FROM Orders o LEFT JOIN UserKeys k ON o.key_id = k.key_id";
 
 		if (status != null && !status.equals("all")) {
-			query += " WHERE status = ?";
+			query += " WHERE o.status = ?";
 		}
-		query += " ORDER BY order_date DESC";
+		query += " ORDER BY o.order_date DESC";
 
 		try (Connection conn = DBContext.getDataSource().getConnection();
 				PreparedStatement ps = conn.prepareStatement(query)) {
@@ -134,6 +141,14 @@ public class OrderDAO {
 					o.setStatus(rs.getString("status"));
 					o.setShippingAddress(rs.getString("shipping_address"));
 					o.setOrderDate(rs.getTimestamp("order_date"));
+					
+					// Ánh xạ thêm các trường chữ ký số
+					o.setKeyId((Integer) rs.getObject("key_id"));
+					o.setDigitalSignature(rs.getString("digital_signature"));
+					o.setOrderHash(rs.getString("order_hash"));
+					o.setSignedAt(rs.getTimestamp("signed_at"));
+					o.setPublicKeyText(rs.getString("public_key_text"));
+					
 					list.add(o);
 				}
 			}
@@ -173,6 +188,13 @@ public class OrderDAO {
 						o.setStatus(rs.getString("status"));
 						o.setShippingAddress(rs.getString("shipping_address"));
 						o.setOrderDate(rs.getTimestamp("order_date"));
+						
+						// Ánh xạ thêm các trường chữ ký số
+						o.setKeyId((Integer) rs.getObject("key_id"));
+						o.setDigitalSignature(rs.getString("digital_signature"));
+						o.setOrderHash(rs.getString("order_hash"));
+						o.setSignedAt(rs.getTimestamp("signed_at"));
+						
 						return o;
 					}
 				}
@@ -183,5 +205,57 @@ public class OrderDAO {
 		}
 	
 	
+	// Lấy nguyên bản Detail để thực hiện sinh/kiểm tra mã băm
+	public List<OrderDetail> getRawDetailsForHash(int orderId) {
+		List<OrderDetail> list = new ArrayList<>();
+		String query = "SELECT product_id, quantity, price FROM OrderDetails WHERE order_id = ? ORDER BY product_id ASC";
+		
+		try (Connection conn = DBContext.getDataSource().getConnection();
+			 PreparedStatement ps = conn.prepareStatement(query)) {
+			
+			ps.setInt(1, orderId);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					OrderDetail d = new OrderDetail();
+					d.setProductId(rs.getInt("product_id"));
+					d.setQuantity(rs.getInt("quantity"));
+					d.setPrice(rs.getDouble("price"));
+					list.add(d);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	// Update mã băm và chuyển trạng thái 
+	public void updateOrderHashAndStatus(int orderId, String hash, String status) {
+		String query = "UPDATE Orders SET order_hash = ?, status = ? WHERE order_id = ?";
+		try (Connection conn = DBContext.getDataSource().getConnection();
+			 PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setString(1, hash);
+			ps.setString(2, status);
+			ps.setInt(3, orderId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Update khi lưu chữ ký số hợp lệ
+	public void updateOrderSignature(int orderId, int keyId, String signature, String status) {
+		String query = "UPDATE Orders SET key_id = ?, digital_signature = ?, signed_at = GETDATE(), status = ? WHERE order_id = ?";
+		try (Connection conn = DBContext.getDataSource().getConnection();
+			 PreparedStatement ps = conn.prepareStatement(query)) {
+			ps.setInt(1, keyId);
+			ps.setString(2, signature);
+			ps.setString(3, status);
+			ps.setInt(4, orderId);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
