@@ -15,7 +15,7 @@ public class DBContext {
 			// --- Cấu hình SQL Server
 			config.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 			config.setJdbcUrl(
-					"jdbc:sqlserver://localhost:1433;databaseName=ECommerceDB;encrypt=true;trustServerCertificate=true;");
+					"jdbc:sqlserver://localhost:1433;databaseName=EEECommerceDBBB;encrypt=true;trustServerCertificate=true;");
 			config.setUsername("sa");
 			config.setPassword("123456");
 

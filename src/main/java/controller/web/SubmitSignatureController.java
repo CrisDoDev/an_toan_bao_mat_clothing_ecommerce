@@ -52,8 +52,8 @@ public class SubmitSignatureController extends HttpServlet {
             boolean isIntact = SignatureUtil.verifySignature(orderHash, signature, activeKey.getPublicKeyText());
 
             if (isIntact) {
-                // UPDATE VAO DB -> VERIFIED
-                orderDAO.updateOrderSignature(orderId, activeKey.getKeyId(), signature, "VERIFIED");
+                // UPDATE VAO DB -> Đã xác thực
+                orderDAO.updateOrderSignature(orderId, activeKey.getKeyId(), signature, "Đã xác thực");
                 response.sendRedirect("home?status=order_success");
             } else {
                 request.setAttribute("errorMessage", "Chữ ký số sai lệch hoặc không trùng khớp với tài khoản, vui lòng thử lại!");

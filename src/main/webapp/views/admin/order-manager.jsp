@@ -15,9 +15,14 @@
 				<div class="col-auto">
 					<select name="status" class="form-select">
 						<option value="all">Tất cả</option>
-						<option value="Đã xác nhận"
-							${param.status == 'Đã xác nhận' ? 'selected' : ''}>Đã
-							xác nhận</option>
+						<option value="Chờ ký số"
+							${param.status == 'Chờ ký số' ? 'selected' : ''}>Chờ ký số</option>
+						<option value="Đã xác thực"
+							${param.status == 'Đã xác thực' ? 'selected' : ''}>Đã xác thực</option>
+						<option value="Đang giao"
+							${param.status == 'Đang giao' ? 'selected' : ''}>Đang giao</option>
+						<option value="Đã giao"
+							${param.status == 'Đã giao' ? 'selected' : ''}>Đã giao</option>
 						<option value="Đã hủy"
 							${param.status == 'Đã hủy' ? 'selected' : ''}>Đã hủy</option>
 					</select>
@@ -54,14 +59,14 @@
 								value="${o.totalMoney}" type="currency" currencySymbol="₫" /></td>
 						<td>
 							<c:choose>
-								<c:when test="${o.status == 'VERIFIED'}">
-									<span class="badge bg-success">Đã xác thực chữ ký</span>
+								<c:when test="${o.status == 'Đã xác thực'}">
+									<span class="badge bg-success">Đã xác thực</span>
 								</c:when>
-								<c:when test="${o.status == 'TAMPERED'}">
-									<span class="badge bg-danger shadow cursor-pointer" title="CẢNH BÁO: Dữ liệu đơn hàng hoặc giá trị thanh toán đã bị sửa đổi trái phép!">🚨 CẢNH BÁO: ĐƠN HÀNG BỊ SỬA CHỮA (TAMPERED)</span>
+								<c:when test="${o.status == 'Lỗi: Dữ liệu bất thường'}">
+									<span class="badge bg-danger shadow cursor-pointer" title="CẢNH BÁO: Dữ liệu đơn hàng hoặc giá trị thanh toán đã bị sửa đổi trái phép!">LỖI: DỮ LIỆU BẤT THƯỜNG</span>
 								</c:when>
-								<c:when test="${o.status == 'PENDING_SIGNATURE'}">
-									<span class="badge bg-warning text-dark">Chờ khách ký số</span>
+								<c:when test="${o.status == 'Chờ ký số'}">
+									<span class="badge bg-warning text-dark">Chờ ký số</span>
 								</c:when>
 								<c:when test="${o.status == 'Đã hủy'}">
 									<span class="badge bg-secondary">Đã hủy</span>
@@ -115,7 +120,10 @@
 					<div class="mb-3">
 						<label class="form-label">Trạng thái mới</label> <select
 							name="status" id="update_status" class="form-select">
-							<option value="Đã xác nhận">Đã xác nhận</option>
+							<option value="Chờ ký số">Chờ ký số</option>
+							<option value="Đã xác thực">Đã xác thực</option>
+							<option value="Đang giao">Đang giao</option>
+							<option value="Đã giao">Đã giao</option>
 							<option value="Đã hủy">Đã hủy</option>
 						</select>
 					</div>

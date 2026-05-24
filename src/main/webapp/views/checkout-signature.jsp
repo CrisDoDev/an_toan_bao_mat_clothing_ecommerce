@@ -7,13 +7,27 @@
     <meta charset="UTF-8">
     <title>Ký xác nhận đơn hàng - Clothing E-Commerce</title>
     <!-- Include Bootstrap & Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/icons/favicon.png"/>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/linearicons-v1.0.0/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/slick/slick.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/MagnificPopup/magnific-popup.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
 </head>
 <body class="animsition">
     <!-- Header -->
-    <jsp:include page="/views/layout/header.jsp"></jsp:include>
+    <header class="header-v4">
+        <jsp:include page="/views/header.jsp"></jsp:include>
+    </header>
 
     <!-- Content -->
     <div class="container m-t-100 m-b-100">
@@ -48,7 +62,12 @@
 
                         <h5 class="mtext-111 cl2 p-t-20 p-b-10">Bước 2: Ký xác nhận</h5>
                         <p class="stext-111 cl6 p-b-10">
-                            Hãy mở siêu ứng dụng <strong>Tool Ký Số</strong> ở máy tính của bạn. Dán mã băm trên vào ô nhập, chọn file Private Key và bấm <strong>KÝ ĐƠN HÀNG</strong>.
+                            Hãy mở ứng dụng <strong>Tool Ký Số</strong> ở máy tính của bạn. Dán mã băm trên vào ô nhập, chọn file Private Key và bấm <strong>KÝ ĐƠN HÀNG</strong>.
+                            <br/><br/>
+                            <span class="text-danger"><i class="fa fa-download"></i> Bạn chưa có Tool Ký Số cho máy tính?</span> 
+                            <a href="${pageContext.request.contextPath}/tools/SignatureTool.zip" class="text-primary font-weight-bold" download>
+                                Tải Công Cụ (Bản Java Desktop) Tại Đây
+                            </a>
                         </p>
 
                         <hr/>
@@ -74,7 +93,7 @@
     </div>
     
     <!-- Footer -->
-    <jsp:include page="/views/layout/footer.jsp"></jsp:include>
+    <jsp:include page="/views/footer.jsp"></jsp:include>
     
     <script>
         function copyHash() {

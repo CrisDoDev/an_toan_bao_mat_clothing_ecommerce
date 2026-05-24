@@ -73,7 +73,7 @@ public class OrderManagementController extends BaseController {
             dao.OrderDAO orderDAO = new dao.OrderDAO();
             for (Order order : listOrder) {
                 // Chỉ check những đơn đã đc ký
-                if ("VERIFIED".equals(order.getStatus()) && order.getDigitalSignature() != null) {
+                if ("Đã xác thực".equals(order.getStatus()) && order.getDigitalSignature() != null) {
                     
                     // Lôi detail ra nối chuỗi lại theo chuẩn sort ASC để build check hash
                     java.util.List<model.OrderDetail> rawDetails = orderDAO.getRawDetailsForHash(order.getId());
@@ -94,7 +94,7 @@ public class OrderManagementController extends BaseController {
                     
                     if (!isIntact) {
                         // CHỈ GÁN BỘ NHỚ RAM - KHÔNG GHI XUỐNG DB
-                        order.setStatus("TAMPERED");
+                        order.setStatus("Lỗi: Dữ liệu bất thường");
                     }
                 }
             }

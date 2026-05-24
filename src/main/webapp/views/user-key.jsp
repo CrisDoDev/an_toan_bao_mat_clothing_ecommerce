@@ -7,12 +7,26 @@
     <meta charset="UTF-8">
     <title>Quản lý khóa - Clothing E-Commerce</title>
     <!-- Include Bootstrap & Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/icons/favicon.png"/>
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/iconic/css/material-design-iconic-font.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/fonts/linearicons-v1.0.0/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/daterangepicker/daterangepicker.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/slick/slick.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/MagnificPopup/magnific-popup.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/vendor/perfect-scrollbar/perfect-scrollbar.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/util.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/main.css">
 </head>
 <body class="animsition">
-    <jsp:include page="/views/layout/header.jsp"></jsp:include>
+    <header class="header-v4">
+        <jsp:include page="/views/header.jsp"></jsp:include>
+    </header>
 
     <div class="container m-t-100 m-b-100">
         <div class="row">
@@ -22,6 +36,18 @@
                 <c:if test="${not empty successMessage}">
                     <div class="alert alert-success">${successMessage}</div>
                 </c:if>
+
+                <!-- Box Tải Tool Chữ Ký Số -->
+                <div class="alert alert-info d-flex align-items-center mb-4">
+                    <i class="fa fa-info-circle fa-2x mr-3 text-info"></i>
+                    <div>
+                        <strong>Chưa có công cụ tạo khóa?</strong> Hãy 
+                        <a href="${pageContext.request.contextPath}/tools/SignatureTool.zip" class="text-primary font-weight-bold" download>
+                           <i class="fa fa-download"></i> Tải Tool Ký Số (Windows/Mac)
+                        </a> 
+                        để sinh cặp khóa an toàn trên máy tính cá nhân của bạn!
+                    </div>
+                </div>
 
                 <div class="row">
                     <!-- Form Upload Key -->
@@ -113,6 +139,6 @@
         </div>
     </div>
 
-    <jsp:include page="/views/layout/footer.jsp"></jsp:include>
+    <jsp:include page="/views/footer.jsp"></jsp:include>
 </body>
 </html>

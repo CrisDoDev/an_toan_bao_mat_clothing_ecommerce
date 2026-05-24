@@ -85,8 +85,8 @@ public class CheckoutController extends BaseController {
                 
                 String orderHash = SignatureUtil.buildOrderHash(orderId, user.getId(), newOrder.getTotalMoney(), detailStrBuilder.toString());
                 
-                // 2. Chuyển trạng thái đơn hàng thành PENDING_SIGNATURE và lưu hash
-                orderDAO.updateOrderHashAndStatus(orderId, orderHash, "PENDING_SIGNATURE");
+                // 2. Chuyển trạng thái đơn hàng thành Chờ ký số và lưu hash
+                orderDAO.updateOrderHashAndStatus(orderId, orderHash, "Chờ ký số");
 
                 // LẤY THÔNG TIN ĐỂ GỬI MAIL (Trước khi xóa giỏ hàng)
                 List<OrderDetailInfo> details = orderService.getOrderDetails(orderId);

@@ -38,11 +38,12 @@
             font-size: 13px;
             font-weight: 600;
         }
-        /* Logic màu sắc dựa trên text tiếng Việt từ DB */
-        .status-pending { background-color: #ffeaa7; color: #d35400; } 
-        .status-shipping { background-color: #81ecec; color: #00cec9; } 
-        .status-success { background-color: #55efc4; color: #00b894; }  
-        .status-cancel { background-color: #fab1a0; color: #d63031; }  
+        /* Logic màu sắc đồng bộ với Bootstrap trang Admin */
+        .status-warning { background-color: #ffc107; color: #212529; } 
+        .status-info { background-color: #0dcaf0; color: #000000; } 
+        .status-success { background-color: #198754; color: #ffffff; }  
+        .status-secondary { background-color: #6c757d; color: #ffffff; }  
+        .status-danger { background-color: #dc3545; color: #ffffff; }  
     </style>
 </head>
 <body class="animsition">
@@ -106,17 +107,31 @@
                                             </td>
                                             <td class="column-5">
                                                 <span class="order-status 
-                                                    ${o.status == 'Chờ xử lý' ? 'status-pending' : ''}
-                                                    ${o.status == 'Đang giao' ? 'status-shipping' : ''}
+                                                    ${o.status == 'Chờ xử lý' ? 'status-warning' : ''}
+                                                    ${o.status == 'Đang giao' ? 'status-info' : ''}
+                                                    ${o.status == 'Đã xác thực' ? 'status-success' : ''}
                                                     ${o.status == 'Đã giao' ? 'status-success' : ''}
-                                                    ${o.status == 'Đã hủy' ? 'status-cancel' : ''}">
+                                                    ${o.status == 'Đã hủy' ? 'status-secondary' : ''}
+                                                    ${o.status == 'Lỗi: Dữ liệu bất thường' ? 'status-danger' : ''}
+                                                    ${o.status == 'Chờ ký số' ? 'status-warning' : ''}">
                                                     ${o.status}
                                                 </span>
                                             </td>
-                                             <td class="column-5 text-center">
-                                                <button class="stext-104 cl2 hov-cl1 trans-04 js-show-detail" data-id="${o.id}">
+                                            <td class="column-5 text-center">
+                                                <button class="stext-104 cl2 hov-cl1 trans-04 js-show-detail m-r-10" data-id="${o.id}">
                                                     <i class="zmdi zmdi-eye" style="font-size: 20px;"></i>
                                                 </button>
+                                                
+                                                <c:if test="${o.status == 'Chờ ký số'}">
+                                                	<form action="checkout" method="get" style="display:inline-block;">
+                                                		<!-- Ta có thể đẩy tới trang chữ ký bằng cách post dữ liệu lại hoặc dẫn link -->
+                                                		<!-- Phải viết chức năng cho phép tiếp tục kí lại -->
+                                                		<!-- Tuy nhiên để đơn giản, ta code một servlet mới hoặc logic nhỏ ở OrderHistoryController. -->
+                                                	</form>
+                                                	<a href="${pageContext.request.contextPath}/retry-sign?orderId=${o.id}" class="badge bg-warning text-dark border-0 p-2" title="Tiếp tục Ký Hóa Đơn">
+                                                		<i class="fa fa-pencil"></i> Ký Hóa Đơn
+                                                	</a>
+                                                </c:if>
                                             </td>
                                         </tr>
                                     </c:forEach>

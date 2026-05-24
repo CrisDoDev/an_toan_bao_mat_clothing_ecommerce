@@ -67,40 +67,38 @@
 
 					<c:choose>
 						<c:when test="${not empty sessionScope.user}">
-							<a href="profile.jsp" class="flex-c-m trans-04 p-lr-25"
+							<a href="profile.jsp" class="flex-c-m trans-04 p-lr-10"
 								style="color: #00ad5f; font-weight: bold;"> <i
-								class="fa fa-user m-r-5"></i> <fmt:message key="admin.welcome"
-									bundle="${msgs}" /> ${sessionScope.user.fullName}
+								class="fa fa-user m-r-5"></i> ${sessionScope.user.fullName}
 							</a>
 							
 							<a href="${pageContext.request.contextPath}/user-key"
-								class="flex-c-m trans-04 p-lr-25"> <i class="fa fa-key m-r-5"></i> Quản lý khóa
+								class="flex-c-m trans-04 p-lr-10"> <i class="fa fa-key m-r-5"></i> Khóa
 							</a>
 
 							<a href="${pageContext.request.contextPath}/order-history"
-								class="flex-c-m trans-04 p-lr-25"> <fmt:message
+								class="flex-c-m trans-04 p-lr-10"> <fmt:message
 									key="menu.myOrders" bundle="${msgs}" />
 							</a>
 
 							<c:if test="${sessionScope.user.roleId == 1}">
 								<a href="${pageContext.request.contextPath}/admin/dashboard"
-									class="flex-c-m trans-04 p-lr-25" style="color: red;"> <fmt:message
-										key="admin.dashboard" bundle="${msgs}" />
+									class="flex-c-m trans-04 p-lr-10" style="color: red;"> Admin
 								</a>
 							</c:if>
 
 							<a href="${pageContext.request.contextPath}/logout"
-								class="flex-c-m trans-04 p-lr-25"> <fmt:message
-									key="menu.logout" bundle="${msgs}" />
+								class="flex-c-m trans-04 p-lr-10" style="color: #d63031; font-weight: bold;"> 
+                                <i class="fa fa-sign-out m-r-5"></i> Đăng xuất
 							</a>
 						</c:when>
 						<c:otherwise>
 							<a href="${pageContext.request.contextPath}/register.jsp"
-								class="flex-c-m trans-04 p-lr-25"> <fmt:message
+								class="flex-c-m trans-04 p-lr-15"> <fmt:message
 									key="menu.register" bundle="${msgs}" />
 							</a>
 							<a href="${pageContext.request.contextPath}/login.jsp"
-								class="flex-c-m trans-04 p-lr-25"> <fmt:message
+								class="flex-c-m trans-04 p-lr-15"> <fmt:message
 									key="menu.login" bundle="${msgs}" />
 							</a>
 						</c:otherwise>
