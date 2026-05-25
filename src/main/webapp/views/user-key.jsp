@@ -39,7 +39,7 @@
                     <div>
                         <strong>Chưa có công cụ tạo khóa?</strong> Hãy 
                         <a href="${pageContext.request.contextPath}/tools/SignatureTool.zip" class="text-primary font-weight-bold" download>
-                           Tải Tool Ký Số (Windows/Mac)
+                           Tải Tool Ký Số
                         </a> 
                         để sinh cặp khóa an toàn trên máy tính cá nhân của bạn!
                     </div>
